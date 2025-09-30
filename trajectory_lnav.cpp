@@ -372,9 +372,26 @@ bool CTrajectory::CreateLNAVProfile(CInpParams* pInpParams)
 		} // fgets
 		else
 		{
-			if (fileout_) fprintf(fileout_,"Failure to read LNAV file.\n");
-			fclose(fid);
-			return false;
+			if (ferror(fid))
+			{
+				if (fileout_) fprintf(fileout_,"Failure to read LNAV file.\n");
+				fclose(fid);
+				return false;
+			}
+			else
+			{
+				if (nManeuvers_==0)
+				{
+					if (fileout_) fprintf(fileout_,"No valid maneuver was read. Wrong formatting?\n");
+					fclose(fid);
+					return false;
+				}
+				else
+				{
+					fclose(fid);
+					return true; // end of file
+				}
+			}
 		}
 	}
 
