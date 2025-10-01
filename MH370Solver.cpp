@@ -66,7 +66,6 @@ extern void ComputeBFO(char* inpfilename, char* outfilename,
 
 
 
-
 void main(int argc, char* argv[])
 {
 	char inpfilename[1024];	// input configuration file
@@ -101,11 +100,6 @@ void main(int argc, char* argv[])
 	sprintf(str_arg9,"");
 	sprintf(optname,"");
 
-	// optimization weights (optional)
-	double opt_weight1 = -999.0;
-	double opt_weight2 = -999.0;
-
-
 
 	if (argc<2)
 	{
@@ -116,6 +110,8 @@ void main(int argc, char* argv[])
 		printf("-opt2 a,b,bb,d,t,x,y,h,s,g1,g2,m,lnav inpconfigfilename outconfigfilename: optimization by var max criteria.\n");
 		printf("\"a,b,bb,d,t,x,y,h,s,g1,g2,m,lnav\" is the list of possible optimization variables\n");
 		printf("-optm inpconfigfilename outconfigfilename: weight optimization.\n");
+		printf("-optweight1 val1: optional optimization weight for ping distance. Replaces default value 0.0001 m^-1.\n");
+		printf("-optweight2 val2: optional optimization weight for bfo. Replaces default value of 0.2 Hz^-1.\n");
 		printf("-calibrate: run calibration.\n");
 		printf("-validate filename: run validation using specified setup file.\n");
 		printf("-printpings: print Inmarsat ping data.\n");
@@ -668,6 +664,5 @@ void main(int argc, char* argv[])
 		break;
 	}
 }; // End main
-
 
 
