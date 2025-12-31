@@ -140,7 +140,11 @@ inline double get_ff(double TAS, double m, double air_t, double rho_a, bool isSi
 		Ct = 3.014011529708891e-004;
 	};
 
-	// calculate angle of attack, rads
+	// Calculate angle of attack, rads
+	// References: Richardson T.S., Beaverstock C., Isikveren A., Meheri A., Badcock K, Ronch A.D.: Analysis of the Boeing 747-100 using CEASIOM. 
+	// Progress in Aerospace Sciences, V.47(8), 2011, 660--673. https://doi.org/10.1016/j.paerosci.2011.08.009;
+	// Also: https://aerospaceweb.org/question/aerodynamics/q0252.shtml#:~:text=We%20can%20again%20use%20the,provided%20in%20the%20original%20data.
+
 	double CLa = 5.5; // B747 CL linear model: CL = CL0 + CLa*alpha
 	double CL0 = 0.29;
 	double S_ref = 427.8; // wings area, m^2
@@ -245,16 +249,19 @@ void CManeuver::Calc_uvwq(double& u, double& v, double& w, double& q, double& dp
 		// Presumably it may match the time when SAARU's north was last set, and is may not necessarily be when the SAARU was started up in the KLIA
 
 		double p0x, p0y, p0z;
-		uv2uvw(p0x, p0y, p0z, 0.0, 1.0, gyro_heading_param1_, gyro_heading_param2_);
+		//uv2uvw(p0x, p0y, p0z, 0.0, 1.0, gyro_heading_param1_, gyro_heading_param2_);
+		uv2uvw(p0x, p0y, p0z, 0.0, 1.0, gyro_heading_param1_-360.0/86400.0*(t+t0_), gyro_heading_param2_); // unit vector, which defines gyroscopic "north" in the ECEF frame
 
 		// Now calculate {u,v} direction vectors of the local tangential plane in the non-rotating reference frame
 		// use uv2uvw to compute W->E and S->N direction vectors, and then projections of the "gyroscopic north" vector in ECEF (assuming that SAARU thinks it is the true north)
 		// on those to determine the deviation of the "gyroscopic reference heading" from the true north
 		double n_we_x, n_we_y, n_we_z;
-		uv2uvw(n_we_x, n_we_y, n_we_z, 1.0, 0.0, lon-360.0/86400.0*(t+t0_), lat);	// unit vector west to east in the non-spinning reference frame
+		//uv2uvw(n_we_x, n_we_y, n_we_z, 1.0, 0.0, lon-360.0/86400.0*(t+t0_), lat);	// unit vector west to east in the non-spinning reference frame
+		uv2uvw(n_we_x, n_we_y, n_we_z, 1.0, 0.0, lon, lat);	// unit vector west to east in the ECEF reference frame
 
 		double n_sn_x, n_sn_y, n_sn_z;
-		uv2uvw(n_sn_x, n_sn_y, n_sn_z, 0.0, 1.0, lon-360.0/86400.0*(t+t0_), lat);	// unit vector south to north in the non-spinning reference frame
+		//uv2uvw(n_sn_x, n_sn_y, n_sn_z, 0.0, 1.0, lon-360.0/86400.0*(t+t0_), lat);	// unit vector south to north in the non-spinning reference frame
+		uv2uvw(n_sn_x, n_sn_y, n_sn_z, 0.0, 1.0, lon, lat);	// unit vector south to north in the ECEF reference frame
 
 		// Now we need to present gyroscopic heading vector as the sum of vectors of the local reference frame, which moves with the airplane
 		// To do that calculate projections of the gyroscopic N vector on the axes of the tangential plane (vertical component is ignored)
@@ -417,16 +424,19 @@ void CManeuverTurn::Calc_uvwq(double& u, double& v, double& w, double& q, double
 		// Presumably it may match the time when SAARU's north was last set, and is may not necessarily be when the SAARU was started up in the KLIA
 
 		double p0x, p0y, p0z;
-		uv2uvw(p0x, p0y, p0z, 0.0, 1.0, gyro_heading_param1_, gyro_heading_param2_);
+		// uv2uvw(p0x, p0y, p0z, 0.0, 1.0, gyro_heading_param1_, gyro_heading_param2_);
+		uv2uvw(p0x, p0y, p0z, 0.0, 1.0, gyro_heading_param1_-360.0/86400.0*(t+t0_), gyro_heading_param2_);
 
 		// Now calculate {u,v} direction vectors of the local tangential plane in the non-rotating reference frame
 		// use uv2uvw to compute W->E and S->N direction vectors, and then projections of the "gyroscopic north" vector in ECEF (assuming that SAARU thinks it is the true north)
 		// on those to determine the deviation of the "gyroscopic reference heading" from the true north
 		double n_we_x, n_we_y, n_we_z;
-		uv2uvw(n_we_x, n_we_y, n_we_z, 1.0, 0.0, lon-360.0/86400.0*(t+t0_), lat);	// unit vector west to east in the non-spinning reference frame
+		//uv2uvw(n_we_x, n_we_y, n_we_z, 1.0, 0.0, lon-360.0/86400.0*(t+t0_), lat);	// unit vector west to east in the non-spinning reference frame
+		uv2uvw(n_we_x, n_we_y, n_we_z, 1.0, 0.0, lon, lat);	// unit vector west to east in the ECEF reference frame
 
 		double n_sn_x, n_sn_y, n_sn_z;
-		uv2uvw(n_sn_x, n_sn_y, n_sn_z, 0.0, 1.0, lon-360.0/86400.0*(t+t0_), lat);	// unit vector south to north in the non-spinning reference frame
+		//uv2uvw(n_sn_x, n_sn_y, n_sn_z, 0.0, 1.0, lon-360.0/86400.0*(t+t0_), lat);	// unit vector south to north in the non-spinning reference frame
+		uv2uvw(n_sn_x, n_sn_y, n_sn_z, 0.0, 1.0, lon, lat);	// unit vector south to north in the ECEF reference frame
 
 		// Now we need to present gyroscopic heading vector as the sum of vectors of the local reference frame, which moves with the airplane
 		// To do that calculate projections of the gyroscopic N vector on the axes of the tangential plane (vertical component is ignored)
