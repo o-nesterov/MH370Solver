@@ -104,10 +104,16 @@ struct VNAVProfile
 // -------------------------------
 // Aircraft limits
 // maximum operating speed (knots)
+// For descent scenarios change AIRCRAFT_VMO and AIRCRAFT_VFC to 315 knots:
+// During descent initiated in MACH speed mode, the mode automatically changes to IAS mode upon reaching IAS = 310 knots
+// ("During descent, automatically changes from MACH to IAS at 310 KIAS") - e.g., Continental Airlines' manual Rev. 11/01/02
+
 #define AIRCRAFT_VMO 330.0
+//#define AIRCRAFT_VMO 310.0
 
 // maximum speed for stability characteristics B777F - "Boeing 777F First Flight Workshop in Vienna, Austria 2009"  (knots)
 #define AIRCRAFT_VFC 357.0
+//#define AIRCRAFT_VFC 310.0
 
 // maximum operating mach
 #define AIRCRAFT_MMO 0.87

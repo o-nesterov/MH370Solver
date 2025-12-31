@@ -64,6 +64,7 @@ void BuildTrajectory(CInpParams* pInpParams, CTrajectory* pTrajectory, CMH370Env
 	double gyro_hdg_param1 = pInpParams->gyro_hdg_param1;	// gyroscopic heading parameters
 	double gyro_hdg_param2 = pInpParams->gyro_hdg_param2;
 
+
 	if (pInpParams->nLNAVOptParams>0) pTrajectory->ResetLNAVOptimizationParameters(pInpParams->LNAVOptParams, pInpParams->nLNAVOptParams);	// reset first leg duration if it was previously optimized
 	pTrajectory->SetDefaultBankAngle(pInpParams->bank_angle, pInpParams->force_default_bank_angle);
 	if (pInpParams->ENG_MODE == ENGINE_MODE_SINGLE) pTrajectory->SetEngineModeSingle();
@@ -242,6 +243,15 @@ void BuildTrajectory(char* inpfilename, bool isVerbose)
 	if(!pTrajectory->CreateLNAVProfile(pInpParams))
 	{
 		if (isVerbose) printf("Integration failed. Missing or wrong LNAV file %s.\n", pInpParams->pLNAVfilename);
+		delete pTrajectory;
+		delete pInmarsatData;
+		delete pInpParams;
+		return;
+	}
+
+	if(!pTrajectory->CreateVNAVProfile(pInpParams))
+	{
+		if (isVerbose) printf("Integration failed. Missing or wrong VNAV file %s.\n", pInpParams->pVNAVfilename);
 		delete pTrajectory;
 		delete pInmarsatData;
 		delete pInpParams;
@@ -745,6 +755,9 @@ void CTrajectory::BuildTrajectory(double t0, double endtime,
 
 	// beginning of the section
 	int current_maneuver = 0;		 // maneuver number - start from the straight path
+
+	// reset vertical maneuver
+	cVmaneuver_ = 0;				// current vertical maneuver
 
 	double current_time = t0;		// current time
 	double current_lon = lon0;		// current longitude

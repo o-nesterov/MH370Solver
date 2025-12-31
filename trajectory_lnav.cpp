@@ -311,7 +311,7 @@ bool CTrajectory::CreateLNAVProfile(CInpParams* pInpParams)
 						ofparams[2] = false;
 
 						addManeuver2List_(MANEUVER_TYPE_TURN, 2, iparams, 3, fparams1, ofparams1, false);
-						addManeuver2List_(MANEUVER_TYPE_HLEG, 0, iparams, 3, fparams, ofparams, true);
+						addManeuver2List_(MANEUVER_TYPE_HLEG, 2, iparams, 3, fparams, ofparams, true);
 
 					}
 				}

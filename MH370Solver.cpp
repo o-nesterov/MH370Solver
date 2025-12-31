@@ -66,6 +66,7 @@ extern void ComputeBFO(char* inpfilename, char* outfilename,
 
 
 
+
 void main(int argc, char* argv[])
 {
 	char inpfilename[1024];	// input configuration file
@@ -100,6 +101,22 @@ void main(int argc, char* argv[])
 	sprintf(str_arg9,"");
 	sprintf(optname,"");
 
+
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< temporal - examples of use for debugging is/as needed; comment parsing up to "Execute action based on command" in this case
+
+//	sprintf(inpfilename, "C:\\MH370Solver\\Simulations\\Setup\\ERA5\\IAS\\Section-1941-0019-with-descent\\TrueHDG\\config_10000.txt");
+//	sprintf(outfilename, "C:\\MH370Solver\\Simulations\\Setup\\ERA5\\IAS\\Section-1941-0019-with-descent\\TrueHDG\\config_10000_opt.txt");
+//	isVerbose = true;
+//	action = ACT_TRJ;
+
+
+//	sprintf(inpfilename, "C:\\MH370Solver\\Simulations\\Setup\\ERA5\\IAS\\Section-1941-0019-with-descent\\TrueHDG\\config_10000.txt");
+//	sprintf(outfilename, "C:\\MH370Solver\\Simulations\\Setup\\ERA5\\IAS\\Section-1941-0019-with-descent\\TrueHDG\\config_10000_opt.txt");
+//	sprintf(optname, "0x,y,s,m");
+//	isVerbose = true;
+//	action = ACT_OPT;
+
+	// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< end temporal 
 
 	if (argc<2)
 	{
@@ -664,5 +681,6 @@ void main(int argc, char* argv[])
 		break;
 	}
 }; // End main
+
 
 

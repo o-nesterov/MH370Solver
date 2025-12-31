@@ -1594,16 +1594,19 @@ double True2GyroHDG(double hdg, double lon, double lat, double t, double  gyro_h
 	// Presumably it may match the time when SAARU's north was last set, and is may not necessarily be when the SAARU was started up in the KLIA
 
 		double p0x, p0y, p0z;
-		uv2uvw(p0x, p0y, p0z, 0.0, 1.0, gyro_heading_param1, gyro_heading_param2);
+//		uv2uvw(p0x, p0y, p0z, 0.0, 1.0, gyro_heading_param1, gyro_heading_param2);
+		uv2uvw(p0x, p0y, p0z, 0.0, 1.0, gyro_heading_param1-360.0/86400.0*t, gyro_heading_param2); //unit vector in ECEF
 
 		// Now calculate {u,v} direction vectors of the local tangential plane in the non-rotating reference frame
 		// use uv2uvw to compute W->E and S->N direction vectors, and then projections of the "gyroscopic north" vector in ECEF (assuming that SAARU thinks it is the true north)
 		// on those to determine the deviation of the "gyroscopic reference heading" from the true north
 		double n_we_x, n_we_y, n_we_z;
-		uv2uvw(n_we_x, n_we_y, n_we_z, 1.0, 0.0, lon-360.0/86400.0*t, lat);	// unit vector west to east in the non-spinning reference frame
+//		uv2uvw(n_we_x, n_we_y, n_we_z, 1.0, 0.0, lon-360.0/86400.0*t, lat);	// unit vector west to east in the non-spinning reference frame
+		uv2uvw(n_we_x, n_we_y, n_we_z, 1.0, 0.0, lon, lat);	// unit vector west to east in ECEF
 
 		double n_sn_x, n_sn_y, n_sn_z;
-		uv2uvw(n_sn_x, n_sn_y, n_sn_z, 0.0, 1.0, lon-360.0/86400.0*t, lat);	// unit vector south to north in the non-spinning reference frame
+//		uv2uvw(n_sn_x, n_sn_y, n_sn_z, 0.0, 1.0, lon-360.0/86400.0*t, lat);	// unit vector south to north in the non-spinning reference frame
+		uv2uvw(n_sn_x, n_sn_y, n_sn_z, 0.0, 1.0, lon, lat);	// unit vector south to north in ECEF
 
 		// Now we need to present gyroscopic heading vector as the sum of vectors of the local reference frame, which moves with the airplane
 		// To do that calculate projections of the gyroscopic N vector on the axes of the tangential plane (vertical component is ignored)
@@ -1644,16 +1647,19 @@ double Gyro2TrueHDG(double hdg, double lon, double lat, double t, double gyro_he
 	// Presumably it may match the time when SAARU's north was last set, and is may not necessarily be when the SAARU was started up in the KLIA
 
 		double p0x, p0y, p0z;
-		uv2uvw(p0x, p0y, p0z, 0.0, 1.0, gyro_heading_param1, gyro_heading_param2);
+//		uv2uvw(p0x, p0y, p0z, 0.0, 1.0, gyro_heading_param1, gyro_heading_param2);
+		uv2uvw(p0x, p0y, p0z, 0.0, 1.0, gyro_heading_param1-360.0/86400.0*t, gyro_heading_param2);
 
 		// Now calculate {u,v} direction vectors of the local tangential plane in the non-rotating reference frame
 		// use uv2uvw to compute W->E and S->N direction vectors, and then projections of the "gyroscopic north" vector in ECEF (assuming that SAARU thinks it is the true north)
 		// on those to determine the deviation of the "gyroscopic reference heading" from the true north
 		double n_we_x, n_we_y, n_we_z;
-		uv2uvw(n_we_x, n_we_y, n_we_z, 1.0, 0.0, lon-360.0/86400.0*t, lat);	// unit vector west to east in the non-spinning reference frame
+//		uv2uvw(n_we_x, n_we_y, n_we_z, 1.0, 0.0, lon-360.0/86400.0*t, lat);	// unit vector west to east in the non-spinning reference frame
+		uv2uvw(n_we_x, n_we_y, n_we_z, 1.0, 0.0, lon, lat);	// unit vector west to east in the non-spinning reference frame
 
 		double n_sn_x, n_sn_y, n_sn_z;
-		uv2uvw(n_sn_x, n_sn_y, n_sn_z, 0.0, 1.0, lon-360.0/86400.0*t, lat);	// unit vector south to north in the non-spinning reference frame
+//		uv2uvw(n_sn_x, n_sn_y, n_sn_z, 0.0, 1.0, lon-360.0/86400.0*t, lat);	// unit vector south to north in the non-spinning reference frame
+		uv2uvw(n_sn_x, n_sn_y, n_sn_z, 0.0, 1.0, lon, lat);	// unit vector south to north in the non-spinning reference frame
 
 		// Now we need to present gyroscopic heading vector as the sum of vectors of the local reference frame, which moves with the airplane
 		// To do that calculate projections of the gyroscopic N vector on the axes of the tangential plane (vertical component is ignored)

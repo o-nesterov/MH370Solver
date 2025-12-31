@@ -416,6 +416,14 @@ CTrajectory* optimize_weight(CInpParams* pInpParams, CMH370InmarsatData* pInmars
 			delete pTrajectory;
 			return NULL;
 		}
+
+		if(!pTrajectory->CreateVNAVProfile(pInpParams))
+		{
+			if (messagestream) fprintf(messagestream, "Optimization failed. Missing or wrong VNAV file %s.\n", pInpParams->pVNAVfilename);
+			delete pTrajectory;
+			return NULL;
+		}
+
 		if (pInpParams->nLNAVOptParams>0) pTrajectory->ResetLNAVOptimizationParameters(pInpParams->LNAVOptParams, pInpParams->nLNAVOptParams);	// reset LNAV optimization parameters
 		pTrajectory->SetDefaultBankAngle(pInpParams->bank_angle, pInpParams->force_default_bank_angle);
 		if (pInpParams->ENG_MODE == ENGINE_MODE_SINGLE) pTrajectory->SetEngineModeSingle();
@@ -682,6 +690,13 @@ CTrajectory* optimize(CInpParams* pInpParams, CMH370InmarsatData* pInmarsatData,
 	if(!pTrajectory->CreateLNAVProfile(pInpParams))
 	{
 		if (messagestream) fprintf(messagestream, "Optimization failed. Missing or wrong LNAV file %s.\n", pInpParams->pLNAVfilename);
+		delete pTrajectory;
+		return NULL;
+	}
+
+	if(!pTrajectory->CreateVNAVProfile(pInpParams))
+	{
+		if (messagestream) fprintf(messagestream, "Optimization failed. Missing or wrong VNAV file %s.\n", pInpParams->pVNAVfilename);
 		delete pTrajectory;
 		return NULL;
 	}
